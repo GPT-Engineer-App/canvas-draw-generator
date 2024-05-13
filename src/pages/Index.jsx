@@ -11,28 +11,36 @@ const Index = () => {
 
   useEffect(() => {
     const canvas = leftCanvasRef.current;
-    const ctx = canvas.getContext("2d");
-    setContext(ctx);
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      setContext(ctx);
+    }
   }, []);
 
   const startDrawing = (e) => {
     const { offsetX, offsetY } = e.nativeEvent;
-    context.beginPath();
-    context.moveTo(offsetX, offsetY);
-    setIsDrawing(true);
+    if (context) {
+      context.beginPath();
+      context.moveTo(offsetX, offsetY);
+      setIsDrawing(true);
+    }
   };
 
   const draw = (e) => {
     if (!isDrawing) return;
     const { offsetX, offsetY } = e.nativeEvent;
-    context.lineTo(offsetX, offsetY);
-    context.stroke();
-    mirrorDrawing();
+    if (context) {
+      context.lineTo(offsetX, offsetY);
+      context.stroke();
+      mirrorDrawing();
+    }
   };
 
   const stopDrawing = () => {
-    context.closePath();
-    setIsDrawing(false);
+    if (context) {
+      context.closePath();
+      setIsDrawing(false);
+    }
   };
 
   const mirrorDrawing = () => {
@@ -44,14 +52,18 @@ const Index = () => {
   };
 
   const clearCanvas = () => {
-    context.clearRect(0, 0, leftCanvasRef.current.width, leftCanvasRef.current.height);
-    mirrorDrawing();
+    if (context) {
+      context.clearRect(0, 0, leftCanvasRef.current.width, leftCanvasRef.current.height);
+      mirrorDrawing();
+    }
   };
 
   const changeTool = (selectedTool) => {
     setTool(selectedTool);
-    context.strokeStyle = selectedTool === "brush" ? "black" : "white";
-    context.lineWidth = selectedTool === "brush" ? 2 : 10;
+    if (context) {
+      context.strokeStyle = selectedTool === "brush" ? "black" : "white";
+      context.lineWidth = selectedTool === "brush" ? 2 : 10;
+    }
   };
 
   return (
